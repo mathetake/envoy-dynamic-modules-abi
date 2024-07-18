@@ -1,0 +1,21 @@
+
+name: Check build
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    name: Build & Test on Envoy v${{ matrix.envoy.version }}
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build as a C header
+      run: clang abi.h
+
+    - name: Build as a C++ header
+      run: cp abi.h abi.hpp && clang++ abi.hpp
