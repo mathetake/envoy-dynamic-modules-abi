@@ -26,9 +26,13 @@ typedef const char* __envoy_dynamic_module_v1_type_ModuleConfigPtr OWNED_BY_ENVO
 // __envoy_dynamic_module_v1_event_module_init function.
 typedef size_t __envoy_dynamic_module_v1_type_ModuleConfigSize;
 
+// __envoy_dynamic_module_v1_type_ModuleContextPtr is a pointer to in-module singleton context
+// corresponding to the module. This is passed to __envoy_dynamic_module_v1_event_http_context_init.
+typedef void* __envoy_dynamic_module_v1_type_ModuleContextPtr OWNED_BY_MODULE;
+
 // __envoy_dynamic_module_v1_type_EnvoyFilterPtr is a pointer to the DynamicModule::HttpFilter
-// instance. It is always passed to the module's event hooks. Modules are not supposed to manipulate
-// this pointer.
+// instance. It is always passed to the module's http event hooks. Modules are not supposed to
+// manipulate this pointer.
 typedef void* __envoy_dynamic_module_v1_type_EnvoyFilterPtr OWNED_BY_ENVOY;
 
 // __envoy_dynamic_module_v1_type_HttpContextPtr is a pointer to in-module context corresponding
@@ -103,11 +107,12 @@ typedef size_t __envoy_dynamic_module_v1_type_DataSliceLength;
 
 // If this is the Envoy code, all definitions are declared as function pointers typedefs.
 #ifdef ENVOY_DYNAMIC_MODULE
-typedef size_t (*__envoy_dynamic_module_v1_event_module_init)(
-    __envoy_dynamic_module_v1_type_ModuleConfigPtr,
-    __envoy_dynamic_module_v1_type_ModuleConfigSize);
+typedef __envoy_dynamic_module_v1_type_ModuleContextPtr (
+    *__envoy_dynamic_module_v1_event_module_init)(__envoy_dynamic_module_v1_type_ModuleConfigPtr,
+                                                  __envoy_dynamic_module_v1_type_ModuleConfigSize);
 typedef __envoy_dynamic_module_v1_type_HttpContextPtr (
-    *__envoy_dynamic_module_v1_event_http_context_init)();
+    *__envoy_dynamic_module_v1_event_http_context_init)(
+    __envoy_dynamic_module_v1_type_EnvoyFilterPtr, __envoy_dynamic_module_v1_type_ModuleContextPtr);
 typedef __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatus (
     *__envoy_dynamic_module_v1_event_http_request_headers)(
     __envoy_dynamic_module_v1_type_EnvoyFilterPtr, __envoy_dynamic_module_v1_type_HttpContextPtr,
@@ -134,8 +139,11 @@ typedef void (*__envoy_dynamic_module_v1_event_http_destroy)(
 #else // If this is the module code, all definitions are declared function prototypes.
 
 // __envoy_dynamic_module_v1_event_module_init is called by the main thread when the module is
-// loaded exactly once per module. The function returns 0 on success and non-zero on failure.
-size_t __envoy_dynamic_module_v1_event_module_init(
+// loaded exactly once per module. The function returns
+// __envoy_dynamic_module_v1_type_ModuleContextPtr which is a pointer to the module context. The
+// lifetime of the returned pointer should be managed by the dynamic module. Returning nullptr
+// indicates a failure to initialize the module.
+__envoy_dynamic_module_v1_type_ModuleContextPtr __envoy_dynamic_module_v1_event_module_init(
     __envoy_dynamic_module_v1_type_ModuleConfigPtr config_ptr,
     __envoy_dynamic_module_v1_type_ModuleConfigSize config_size);
 
@@ -144,7 +152,9 @@ size_t __envoy_dynamic_module_v1_event_module_init(
 //
 // The function returns a pointer to a new instance of the context or nullptr on failure.
 // The lifetime of the returned pointer should be managed by the dynamic module.
-__envoy_dynamic_module_v1_type_HttpContextPtr __envoy_dynamic_module_v1_event_http_context_init();
+__envoy_dynamic_module_v1_type_HttpContextPtr __envoy_dynamic_module_v1_event_http_context_init(
+    __envoy_dynamic_module_v1_type_EnvoyFilterPtr envoy_filter_ptr,
+    __envoy_dynamic_module_v1_type_ModuleContextPtr module_ctx_ptr);
 
 // __envoy_dynamic_module_v1_event_http_request_headers is called when request headers are received.
 __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatus
