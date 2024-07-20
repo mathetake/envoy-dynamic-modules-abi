@@ -99,6 +99,73 @@ typedef const char* __envoy_dynamic_module_v1_type_DataSlicePtr OWNED_BY_MODULE;
 typedef size_t __envoy_dynamic_module_v1_type_DataSliceLength;
 
 // -----------------------------------------------------------------------------
+// ----------------------------------- Enums -----------------------------------
+// -----------------------------------------------------------------------------
+
+// __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_CONTINUE indicates that the module has finished
+// processing the headers and Envoy should continue processing the request body or response body.
+#define __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_CONTINUE 0
+// __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_STOP_ITERATION indicates that Envoy shouldn't continue
+// from processing the headers and should stop iteration. This means that body data will not be
+// processed. In other words, event_http_request_body and event_http_response_body will not be
+// called until continue_request or continue_response is called.
+#define __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_STOP_ITERATION 1
+// __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_STOP_ALL_ITERATION_AND_BUFFER indicates
+// that Envoy should stop iteration on headers but continue to buffer the request/response body
+// until the limit is reached. When the limit is reached, Envoy will stop buffering and returns 500
+// to the client. This means that event_http_request_body and event_http_response_body will be
+// called while without sendin headers to the upstream.
+//
+// The header processing can be resumed by either calling continue_request/continue_response, or
+// returns continue status in the event_http_request_body or event_http_response_body.
+#define __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_STOP_ALL_ITERATION_AND_BUFFER 3
+
+const __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatus
+    __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatusContinue =
+        __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_CONTINUE;
+const __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatus
+    __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatusStopIteration =
+        __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_STOP_ITERATION;
+const __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatus
+    __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatusStopAllIterationAndBuffer =
+        __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_STOP_ALL_ITERATION_AND_BUFFER;
+
+const __envoy_dynamic_module_v1_type_EventHttpResponseHeadersStatus
+    __envoy_dynamic_module_v1_type_EventHttpResponseHeadersStatusContinue =
+        __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_CONTINUE;
+const __envoy_dynamic_module_v1_type_EventHttpResponseHeadersStatus
+    __envoy_dynamic_module_v1_type_EventHttpResponseHeadersStatusStopIteration =
+        __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_STOP_ITERATION;
+const __envoy_dynamic_module_v1_type_EventHttpResponseHeadersStatus
+    __envoy_dynamic_module_v1_type_EventHttpResponseHeadersStatusStopAllIterationAndBuffer =
+        __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_STOP_ALL_ITERATION_AND_BUFFER;
+
+// __ENVOY_DYNAMIC_MODULE_V1_BODY_STATUS_CONTINUE indicates that the module has finished
+// processing the body frame and Envoy should continue processing the request or response.
+//
+// This resumes the header processing if it was stopped in the event_http_request_headers or
+// event_http_response_headers.
+#define __ENVOY_DYNAMIC_MODULE_V1_BODY_STATUS_CONTINUE 0
+
+// __ENVOY_DYNAMIC_MODULE_V1_BODY_STATUS_STOP_ITERATION indicates that Envoy shouldn't continue
+// from processing the body frame and should stop iteration, but continue buffering the body until
+// the limit is reached. When the limit is reached, Envoy will stop buffering and returns 500 to the
+// client.
+//
+// This stops sending body data to the upstream, so if the module wants to continue sending body
+// data, it should call continue_request or continue_response or return continue status in the
+// subsequent event_http_request_body or event_http_response_body.
+#define __ENVOY_DYNAMIC_MODULE_V1_BODY_STATUS_STOP_ITERATION_AND_BUFFER 1
+
+const __envoy_dynamic_module_v1_type_EventHttpRequestBodyStatus
+    __envoy_dynamic_module_v1_type_EventHttpRequestBodyStatusContinue =
+        __ENVOY_DYNAMIC_MODULE_V1_BODY_STATUS_CONTINUE;
+
+const __envoy_dynamic_module_v1_type_EventHttpResponseBodyStatus
+    __envoy_dynamic_module_v1_type_EventHttpResponseBodyStatusContinue =
+        __ENVOY_DYNAMIC_MODULE_V1_BODY_STATUS_CONTINUE;
+
+// -----------------------------------------------------------------------------
 // ------------------------------- Event Hooks ---------------------------------
 // -----------------------------------------------------------------------------
 //
@@ -383,6 +450,16 @@ void __envoy_dynamic_module_v1_http_get_response_body_buffer_prepend(
 // After calling this function, the previously returned slices may be invalidated.
 void __envoy_dynamic_module_v1_http_get_response_body_buffer_drain(
     __envoy_dynamic_module_v1_type_HttpResponseBodyBufferPtr buffer, size_t length);
+
+// __envoy_dynamic_module_v1_http_continue_request is called by the module to continue processing
+// the request. This function is used when the module returned non Continue status in the events.
+void __envoy_dynamic_module_v1_http_continue_request(
+    __envoy_dynamic_module_v1_type_EnvoyFilterPtr envoy_filter_ptr);
+
+// __envoy_dynamic_module_v1_http_continue_response is called by the module to continue processing
+// the response. This function is used when the module returned non Continue status in the events.
+void __envoy_dynamic_module_v1_http_continue_response(
+    __envoy_dynamic_module_v1_type_EnvoyFilterPtr envoy_filter_ptr);
 
 #ifdef __cplusplus
 }
