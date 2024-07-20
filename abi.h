@@ -106,15 +106,16 @@ typedef size_t __envoy_dynamic_module_v1_type_DataSliceLength;
 // processing the headers and Envoy should continue processing the request body or response body.
 #define __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_CONTINUE 0
 // __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_STOP_ITERATION indicates that Envoy shouldn't continue
-// from processing the headers and should stop iteration. This means that body data will not be
-// processed. In other words, event_http_request_body and event_http_response_body will not be
-// called until continue_request or continue_response is called.
+// from processing the headers and should stop iteration. In other words, event_http_request_body
+// and event_http_response_body will be called while not sending headers to the upstream. The header
+// processing can be resumed by either calling continue_request/continue_response, or returns
+// continue status in the event_http_request_body or event_http_response_body.
 #define __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_STOP_ITERATION 1
 // __ENVOY_DYNAMIC_MODULE_V1_HEADER_STATUS_STOP_ALL_ITERATION_AND_BUFFER indicates
-// that Envoy should stop iteration on headers but continue to buffer the request/response body
+// that Envoy should stop all iteration and continue to buffer the request/response body
 // until the limit is reached. When the limit is reached, Envoy will stop buffering and returns 500
-// to the client. This means that event_http_request_body and event_http_response_body will be
-// called while without sendin headers to the upstream.
+// to the client. This means that event_http_request_body and event_http_response_body will not be
+// called.
 //
 // The header processing can be resumed by either calling continue_request/continue_response, or
 // returns continue status in the event_http_request_body or event_http_response_body.
