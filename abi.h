@@ -160,10 +160,16 @@ const __envoy_dynamic_module_v1_type_EventHttpResponseHeadersStatus
 const __envoy_dynamic_module_v1_type_EventHttpRequestBodyStatus
     __envoy_dynamic_module_v1_type_EventHttpRequestBodyStatusContinue =
         __ENVOY_DYNAMIC_MODULE_V1_BODY_STATUS_CONTINUE;
+const __envoy_dynamic_module_v1_type_EventHttpRequestBodyStatus
+    __envoy_dynamic_module_v1_type_EventHttpRequestBodyStatusStopIterationAndBuffer =
+        __ENVOY_DYNAMIC_MODULE_V1_BODY_STATUS_STOP_ITERATION_AND_BUFFER;
 
 const __envoy_dynamic_module_v1_type_EventHttpResponseBodyStatus
     __envoy_dynamic_module_v1_type_EventHttpResponseBodyStatusContinue =
         __ENVOY_DYNAMIC_MODULE_V1_BODY_STATUS_CONTINUE;
+const __envoy_dynamic_module_v1_type_EventHttpResponseBodyStatus
+    __envoy_dynamic_module_v1_type_EventHttpResponseBodyStatusStopIterationAndBuffer =
+        __ENVOY_DYNAMIC_MODULE_V1_BODY_STATUS_STOP_ITERATION_AND_BUFFER;
 
 // -----------------------------------------------------------------------------
 // ------------------------------- Event Hooks ---------------------------------
