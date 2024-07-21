@@ -19,12 +19,18 @@ extern "C" {
 #define OWNED_BY_ENVOY  // Indicates that the memory is owned by Envoy.
 #define OWNED_BY_MODULE // Indicates that the memory is owned by the module.
 
-#define RAW_POINTER uintptr_t
+#ifdef __cplusplus
+typedef void* __envoy_dynamic_module_v1_raw_pointer;
+#else
+// Use uintptr_t to represent a raw pointer in C for simplicity in Go bindings.
+typedef uintptr_t __envoy_dynamic_module_v1_raw_pointer;
+#endif
 
 // __envoy_dynamic_module_v1_type_ModuleConfigPtr is a pointer to the configuration passed to the
 // __envoy_dynamic_module_v1_event_module_init function. Envoy owns the memory of the configuration
 // and the module is not supposed to take ownership of it.
-typedef RAW_POINTER __envoy_dynamic_module_v1_type_ModuleConfigPtr OWNED_BY_ENVOY;
+typedef __envoy_dynamic_module_v1_raw_pointer __envoy_dynamic_module_v1_type_ModuleConfigPtr
+    OWNED_BY_ENVOY;
 
 // __envoy_dynamic_module_v1_type_ModuleConfigSize is the size of the configuration passed to the
 // __envoy_dynamic_module_v1_event_module_init function.
@@ -32,21 +38,25 @@ typedef size_t __envoy_dynamic_module_v1_type_ModuleConfigSize;
 
 // __envoy_dynamic_module_v1_type_ModuleContextPtr is a pointer to in-module singleton context
 // corresponding to the module. This is passed to __envoy_dynamic_module_v1_event_http_context_init.
-typedef RAW_POINTER __envoy_dynamic_module_v1_type_ModuleContextPtr OWNED_BY_MODULE;
+typedef __envoy_dynamic_module_v1_raw_pointer __envoy_dynamic_module_v1_type_ModuleContextPtr
+    OWNED_BY_MODULE;
 
 // __envoy_dynamic_module_v1_type_EnvoyFilterPtr is a pointer to the DynamicModule::HttpFilter
 // instance. It is always passed to the module's http event hooks. Modules are not supposed to
 // manipulate this pointer.
-typedef RAW_POINTER __envoy_dynamic_module_v1_type_EnvoyFilterPtr OWNED_BY_ENVOY;
+typedef __envoy_dynamic_module_v1_raw_pointer __envoy_dynamic_module_v1_type_EnvoyFilterPtr
+    OWNED_BY_ENVOY;
 
 // __envoy_dynamic_module_v1_type_HttpContextPtr is a pointer to in-module context corresponding
 // to a single DynamicModule::HttpFilter instance. It is always passed to the module's event hooks.
-typedef RAW_POINTER __envoy_dynamic_module_v1_type_HttpContextPtr OWNED_BY_MODULE;
+typedef __envoy_dynamic_module_v1_raw_pointer __envoy_dynamic_module_v1_type_HttpContextPtr
+    OWNED_BY_MODULE;
 
 // __envoy_dynamic_module_v1_type_HttpRequestHeadersMapPtr is a pointer to the header map instance.
 // This is passed to the __envoy_dynamic_module_v1_event_http_request_headers event hook.
 // Modules are not supposed to manipulate this pointer.
-typedef RAW_POINTER __envoy_dynamic_module_v1_type_HttpRequestHeadersMapPtr OWNED_BY_ENVOY;
+typedef __envoy_dynamic_module_v1_raw_pointer
+    __envoy_dynamic_module_v1_type_HttpRequestHeadersMapPtr OWNED_BY_ENVOY;
 
 // __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatus is the return value of the
 // __envoy_dynamic_module_v1_event_http_request_headers event. It should be one of the values
@@ -56,7 +66,8 @@ typedef size_t __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatus;
 // __envoy_dynamic_module_v1_type_HttpResponseHeaderMapPtr is a pointer to the header map instance.
 // This is passed to the __envoy_dynamic_module_v1_event_http_response_headers event hook.
 // Modules are not supposed to manipulate this pointer.
-typedef RAW_POINTER __envoy_dynamic_module_v1_type_HttpResponseHeaderMapPtr OWNED_BY_ENVOY;
+typedef __envoy_dynamic_module_v1_raw_pointer
+    __envoy_dynamic_module_v1_type_HttpResponseHeaderMapPtr OWNED_BY_ENVOY;
 
 // __envoy_dynamic_module_v1_type_EventHttpResponseHeadersStatus is the return value of the
 // __envoy_dynamic_module_v1_event_http_response_headers event. It should be one of the values
@@ -66,7 +77,8 @@ typedef size_t __envoy_dynamic_module_v1_type_EventHttpResponseHeadersStatus;
 // __envoy_dynamic_module_v1_type_HttpRequestBodyBufferPtr is a pointer to the body buffer instance
 // passed via __envoy_dynamic_module_v1_event_http_request_body event hook.
 // Modules are not supposed to manipulate this pointer directly.
-typedef RAW_POINTER __envoy_dynamic_module_v1_type_HttpRequestBodyBufferPtr OWNED_BY_ENVOY;
+typedef __envoy_dynamic_module_v1_raw_pointer
+    __envoy_dynamic_module_v1_type_HttpRequestBodyBufferPtr OWNED_BY_ENVOY;
 
 // __envoy_dynamic_module_v1_type_EventHttpRequestBodyStatus is the return value of the
 // __envoy_dynamic_module_v1_event_http_request_body event. It should be one of the values defined
@@ -76,7 +88,8 @@ typedef size_t __envoy_dynamic_module_v1_type_EventHttpRequestBodyStatus;
 // __envoy_dynamic_module_v1_type_HttpResponseBodyBufferPtr is a pointer to the body buffer instance
 // passed via __envoy_dynamic_module_v1_event_http_response_body event hook.
 // Modules are not supposed to manipulate this pointer directly.
-typedef RAW_POINTER __envoy_dynamic_module_v1_type_HttpResponseBodyBufferPtr OWNED_BY_ENVOY;
+typedef __envoy_dynamic_module_v1_raw_pointer
+    __envoy_dynamic_module_v1_type_HttpResponseBodyBufferPtr OWNED_BY_ENVOY;
 
 // __envoy_dynamic_module_v1_type_EventHttpResponseBodyStatus is the return value of the
 // __envoy_dynamic_module_v1_event_http_response_body event. It should be one of the values defined
@@ -90,14 +103,16 @@ typedef size_t __envoy_dynamic_module_v1_type_EndOfStream;
 
 // __envoy_dynamic_module_v1_type_InModuleBufferPtr is a pointer to a buffer that is managed by the
 // module.
-typedef RAW_POINTER __envoy_dynamic_module_v1_type_InModuleBufferPtr OWNED_BY_MODULE;
+typedef __envoy_dynamic_module_v1_raw_pointer __envoy_dynamic_module_v1_type_InModuleBufferPtr
+    OWNED_BY_MODULE;
 
 // __envoy_dynamic_module_v1_type_InModuleBufferLength is the length of the buffer.
 typedef size_t __envoy_dynamic_module_v1_type_InModuleBufferLength;
 
 // __envoy_dynamic_module_v1_type_DataSlicePtr is a pointer to a buffer that is managed by Envoy.
 // This is used to pass buffer slices to the module.
-typedef RAW_POINTER __envoy_dynamic_module_v1_type_DataSlicePtr OWNED_BY_MODULE;
+typedef __envoy_dynamic_module_v1_raw_pointer __envoy_dynamic_module_v1_type_DataSlicePtr
+    OWNED_BY_MODULE;
 
 // __envoy_dynamic_module_v1_type_DataSliceLength is the length of the buffer slice.
 typedef size_t __envoy_dynamic_module_v1_type_DataSliceLength;
