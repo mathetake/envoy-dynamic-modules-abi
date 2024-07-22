@@ -42,8 +42,11 @@ typedef __envoy_dynamic_module_v1_raw_pointer __envoy_dynamic_module_v1_type_Mod
     OWNED_BY_MODULE;
 
 // __envoy_dynamic_module_v1_type_EnvoyFilterPtr is a pointer to the DynamicModule::HttpFilter
-// instance. It is always passed to the module's http event hooks. Modules are not supposed to
-// manipulate this pointer.
+// instance. Modules are not supposed to manipulate this pointer.
+//
+// This is passed to __envoy_dynamic_module_v1_event_http_context_init, and the context can
+// store this pointer to access the filter instance. However, this becomes invalid after the
+// __envoy_dynamic_module_v1_event_http_destroy is called.
 typedef __envoy_dynamic_module_v1_raw_pointer __envoy_dynamic_module_v1_type_EnvoyFilterPtr
     OWNED_BY_ENVOY;
 
@@ -208,26 +211,26 @@ typedef __envoy_dynamic_module_v1_type_HttpContextPtr (
     __envoy_dynamic_module_v1_type_EnvoyFilterPtr, __envoy_dynamic_module_v1_type_ModuleContextPtr);
 typedef __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatus (
     *__envoy_dynamic_module_v1_event_http_request_headers)(
-    __envoy_dynamic_module_v1_type_EnvoyFilterPtr, __envoy_dynamic_module_v1_type_HttpContextPtr,
+    __envoy_dynamic_module_v1_type_HttpContextPtr,
     __envoy_dynamic_module_v1_type_HttpRequestHeadersMapPtr,
     __envoy_dynamic_module_v1_type_EndOfStream);
 typedef __envoy_dynamic_module_v1_type_EventHttpRequestBodyStatus (
     *__envoy_dynamic_module_v1_event_http_request_body)(
-    __envoy_dynamic_module_v1_type_EnvoyFilterPtr, __envoy_dynamic_module_v1_type_HttpContextPtr,
+    __envoy_dynamic_module_v1_type_HttpContextPtr,
     __envoy_dynamic_module_v1_type_HttpRequestBodyBufferPtr,
     __envoy_dynamic_module_v1_type_EndOfStream);
 typedef __envoy_dynamic_module_v1_type_EventHttpResponseHeadersStatus (
     *__envoy_dynamic_module_v1_event_http_response_headers)(
-    __envoy_dynamic_module_v1_type_EnvoyFilterPtr, __envoy_dynamic_module_v1_type_HttpContextPtr,
+    __envoy_dynamic_module_v1_type_HttpContextPtr,
     __envoy_dynamic_module_v1_type_HttpResponseHeaderMapPtr,
     __envoy_dynamic_module_v1_type_EndOfStream);
 typedef __envoy_dynamic_module_v1_type_EventHttpResponseBodyStatus (
     *__envoy_dynamic_module_v1_event_http_response_body)(
-    __envoy_dynamic_module_v1_type_EnvoyFilterPtr, __envoy_dynamic_module_v1_type_HttpContextPtr,
+    __envoy_dynamic_module_v1_type_HttpContextPtr,
     __envoy_dynamic_module_v1_type_HttpResponseBodyBufferPtr,
     __envoy_dynamic_module_v1_type_EndOfStream);
 typedef void (*__envoy_dynamic_module_v1_event_http_destroy)(
-    __envoy_dynamic_module_v1_type_EnvoyFilterPtr, __envoy_dynamic_module_v1_type_HttpContextPtr);
+    __envoy_dynamic_module_v1_type_HttpContextPtr);
 
 #else // If this is the module code, all definitions are declared function prototypes.
 
@@ -252,7 +255,6 @@ __envoy_dynamic_module_v1_type_HttpContextPtr __envoy_dynamic_module_v1_event_ht
 // __envoy_dynamic_module_v1_event_http_request_headers is called when request headers are received.
 __envoy_dynamic_module_v1_type_EventHttpRequestHeadersStatus
 __envoy_dynamic_module_v1_event_http_request_headers(
-    __envoy_dynamic_module_v1_type_EnvoyFilterPtr envoy_filter_ptr,
     __envoy_dynamic_module_v1_type_HttpContextPtr http_context_ptr,
     __envoy_dynamic_module_v1_type_HttpRequestHeadersMapPtr request_headers_ptr,
     __envoy_dynamic_module_v1_type_EndOfStream end_of_stream);
@@ -260,7 +262,6 @@ __envoy_dynamic_module_v1_event_http_request_headers(
 // __envoy_dynamic_module_v1_event_http_request_body is called when request body data is received.
 __envoy_dynamic_module_v1_type_EventHttpRequestBodyStatus
 __envoy_dynamic_module_v1_event_http_request_body(
-    __envoy_dynamic_module_v1_type_EnvoyFilterPtr envoy_filter_ptr,
     __envoy_dynamic_module_v1_type_HttpContextPtr http_context_ptr,
     __envoy_dynamic_module_v1_type_HttpRequestBodyBufferPtr buffer,
     __envoy_dynamic_module_v1_type_EndOfStream end_of_stream);
@@ -269,7 +270,6 @@ __envoy_dynamic_module_v1_event_http_request_body(
 // received.
 __envoy_dynamic_module_v1_type_EventHttpResponseHeadersStatus
 __envoy_dynamic_module_v1_event_http_response_headers(
-    __envoy_dynamic_module_v1_type_EnvoyFilterPtr envoy_filter_ptr,
     __envoy_dynamic_module_v1_type_HttpContextPtr http_context_ptr,
     __envoy_dynamic_module_v1_type_HttpResponseHeaderMapPtr response_headers_map_ptr,
     __envoy_dynamic_module_v1_type_EndOfStream end_of_stream);
@@ -277,14 +277,12 @@ __envoy_dynamic_module_v1_event_http_response_headers(
 // __envoy_dynamic_module_v1_event_http_response_body is called when response body data is received.
 __envoy_dynamic_module_v1_type_EventHttpResponseBodyStatus
 __envoy_dynamic_module_v1_event_http_response_body(
-    __envoy_dynamic_module_v1_type_EnvoyFilterPtr envoy_filter_ptr,
     __envoy_dynamic_module_v1_type_HttpContextPtr http_context_ptr,
     __envoy_dynamic_module_v1_type_HttpResponseBodyBufferPtr buffer,
     __envoy_dynamic_module_v1_type_EndOfStream end_of_stream);
 
 // __envoy_dynamic_module_v1_event_http_destroy is called when the stream is destroyed.
 void __envoy_dynamic_module_v1_event_http_destroy(
-    __envoy_dynamic_module_v1_type_EnvoyFilterPtr envoy_filter_ptr,
     __envoy_dynamic_module_v1_type_HttpContextPtr http_context_ptr);
 #endif
 
@@ -296,6 +294,9 @@ void __envoy_dynamic_module_v1_event_http_destroy(
 // ---------------------------------------------------------------------------------
 //
 // The following functions are called by the module to interact with Envoy.
+//
+// Note that pointers owned by Envoy should be made sure valid by following the caveat in the
+// comments.
 
 // ---------------- Header API ----------------
 
