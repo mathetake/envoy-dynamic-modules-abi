@@ -290,7 +290,7 @@ __envoy_dynamic_module_v1_event_http_filter_instance_request_headers(
     __envoy_dynamic_module_v1_type_EndOfStream end_of_stream);
 
 // __envoy_dynamic_module_v1_event_http_filter_instance_request_body is called when request body
-// data is received.
+// data is received. buffer only contains the data for the current event.
 __envoy_dynamic_module_v1_type_EventHttpRequestBodyStatus
 __envoy_dynamic_module_v1_event_http_filter_instance_request_body(
     __envoy_dynamic_module_v1_type_HttpFilterInstancePtr http_filter_instance_ptr,
@@ -306,7 +306,7 @@ __envoy_dynamic_module_v1_event_http_filter_instance_response_headers(
     __envoy_dynamic_module_v1_type_EndOfStream end_of_stream);
 
 // __envoy_dynamic_module_v1_event_http_filter_instance_response_body is called when response body
-// data is received.
+// data is received. buffer only contains the data for the current event.
 __envoy_dynamic_module_v1_type_EventHttpResponseBodyStatus
 __envoy_dynamic_module_v1_event_http_filter_instance_response_body(
     __envoy_dynamic_module_v1_type_HttpFilterInstancePtr http_filter_instance_ptr,
@@ -418,6 +418,18 @@ void __envoy_dynamic_module_v1_http_set_response_header(
     __envoy_dynamic_module_v1_type_InModuleBufferLength value_length);
 
 // ---------------- Buffer API ----------------
+
+// __envoy_dynamic_module_v1_http_get_request_body_buffer is called by the module to get the entire
+// request body buffer. The function returns the buffer if available, otherwise nullptr.
+__envoy_dynamic_module_v1_type_HttpRequestBodyBufferPtr
+__envoy_dynamic_module_v1_http_get_request_body_buffer(
+    __envoy_dynamic_module_v1_type_EnvoyFilterInstancePtr envoy_filter_instance_ptr);
+
+// __envoy_dynamic_module_v1_http_get_response_body_buffer is called by the module to get the entire
+// response body buffer. The function returns the buffer if available, otherwise nullptr.
+__envoy_dynamic_module_v1_type_HttpResponseBodyBufferPtr
+__envoy_dynamic_module_v1_http_get_response_body_buffer(
+    __envoy_dynamic_module_v1_type_EnvoyFilterInstancePtr envoy_filter_instance_ptr);
 
 // __envoy_dynamic_module_v1_http_get_request_body_buffer_length is called by the module to get the
 // length (number of bytes) of the request body buffer. The function returns the length of the
