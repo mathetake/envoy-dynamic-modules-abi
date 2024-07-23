@@ -439,9 +439,9 @@ void __envoy_dynamic_module_v1_http_get_request_body_buffer_slice(
     __envoy_dynamic_module_v1_type_DataSlicePtrResult result_buffer_ptr,
     __envoy_dynamic_module_v1_type_DataSliceLengthResult result_buffer_length_ptr);
 
-// __envoy_dynamic_module_v1_http_request_body_buffer_copy_out is called by the module to copy
+// __envoy_dynamic_module_v1_http_copy_out_request_body_buffer is called by the module to copy
 // `length` bytes from the request body buffer starting from `offset` to the `result_buffer_ptr`.
-void __envoy_dynamic_module_v1_http_request_body_buffer_copy_out(
+void __envoy_dynamic_module_v1_http_copy_out_request_body_buffer(
     __envoy_dynamic_module_v1_type_HttpRequestBodyBufferPtr buffer, size_t offset, size_t length,
     __envoy_dynamic_module_v1_type_InModuleBufferPtr result_buffer_ptr);
 
