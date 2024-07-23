@@ -439,6 +439,12 @@ void __envoy_dynamic_module_v1_http_get_request_body_buffer_slice(
     __envoy_dynamic_module_v1_type_DataSlicePtrResult result_buffer_ptr,
     __envoy_dynamic_module_v1_type_DataSliceLengthResult result_buffer_length_ptr);
 
+// __envoy_dynamic_module_v1_http_get_request_body_buffer_copy_out is called by the module to copy
+// `length` bytes from the request body buffer starting from `offset` to the `result_buffer_ptr`.
+void __envoy_dynamic_module_v1_http_get_request_body_buffer_copy_out(
+    __envoy_dynamic_module_v1_type_HttpRequestBodyBufferPtr buffer, size_t offset, size_t length,
+    __envoy_dynamic_module_v1_type_InModuleBufferPtr result_buffer_ptr);
+
 // __envoy_dynamic_module_v1_http_get_request_body_buffer_append is called by the module to append
 // data to the request body buffer. The function appends data to the end of the buffer.
 //
@@ -484,6 +490,12 @@ void __envoy_dynamic_module_v1_http_get_response_body_buffer_slice(
     __envoy_dynamic_module_v1_type_HttpResponseBodyBufferPtr buffer, size_t nth,
     __envoy_dynamic_module_v1_type_DataSlicePtrResult result_buffer_ptr,
     __envoy_dynamic_module_v1_type_DataSliceLengthResult result_buffer_length_ptr);
+
+// __envoy_dynamic_module_v1_http_get_response_body_buffer_copy_out is called by the module to copy
+// `length` bytes from the response body buffer starting from `offset` to the `result_buffer_ptr`.
+void __envoy_dynamic_module_v1_http_get_response_body_buffer_copy_out(
+    __envoy_dynamic_module_v1_type_HttpResponseBodyBufferPtr buffer, size_t offset, size_t length,
+    __envoy_dynamic_module_v1_type_InModuleBufferPtr result_buffer_ptr);
 
 // __envoy_dynamic_module_v1_http_get_response_body_buffer_append is called by the module to append
 // data to the response body buffer. The function appends data to the end of the buffer.
