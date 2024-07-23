@@ -338,8 +338,8 @@ size_t __envoy_dynamic_module_v1_http_get_request_header_value(
     __envoy_dynamic_module_v1_type_HttpResponseHeaderMapPtr headers,
     __envoy_dynamic_module_v1_type_InModuleBufferPtr key,
     __envoy_dynamic_module_v1_type_InModuleBufferLength key_length,
-    __envoy_dynamic_module_v1_type_InModuleBufferPtr* result_buffer_ptr,
-    __envoy_dynamic_module_v1_type_InModuleBufferLength* result_buffer_length_ptr);
+    __envoy_dynamic_module_v1_type_DataSlicePtr* result_buffer_ptr,
+    __envoy_dynamic_module_v1_type_DataSliceLength* result_buffer_length_ptr);
 
 // __envoy_dynamic_module_v1_http_get_request_header_value_nth is almost the same as
 // __envoy_dynamic_module_v1_http_get_request_header_value, but it allows the module to access n-th
@@ -349,8 +349,8 @@ void __envoy_dynamic_module_v1_http_get_request_header_value_nth(
     __envoy_dynamic_module_v1_type_HttpResponseHeaderMapPtr headers,
     __envoy_dynamic_module_v1_type_InModuleBufferPtr key,
     __envoy_dynamic_module_v1_type_InModuleBufferLength key_length,
-    __envoy_dynamic_module_v1_type_InModuleBufferPtr* result_buffer_ptr,
-    __envoy_dynamic_module_v1_type_InModuleBufferLength* result_buffer_length_ptr, size_t nth);
+    __envoy_dynamic_module_v1_type_DataSlicePtr* result_buffer_ptr,
+    __envoy_dynamic_module_v1_type_DataSliceLength* result_buffer_length_ptr, size_t nth);
 
 // __envoy_dynamic_module_v1_http_get_response_header_value is called by the module to get the value
 // for a response header key. headers is the one passed to the
@@ -366,8 +366,8 @@ size_t __envoy_dynamic_module_v1_http_get_response_header_value(
     __envoy_dynamic_module_v1_type_HttpResponseHeaderMapPtr headers,
     __envoy_dynamic_module_v1_type_InModuleBufferPtr key,
     __envoy_dynamic_module_v1_type_InModuleBufferLength key_length,
-    __envoy_dynamic_module_v1_type_InModuleBufferPtr* result_buffer_ptr,
-    __envoy_dynamic_module_v1_type_InModuleBufferLength* result_buffer_length_ptr);
+    __envoy_dynamic_module_v1_type_DataSlicePtr* result_buffer_ptr,
+    __envoy_dynamic_module_v1_type_DataSliceLength* result_buffer_length_ptr);
 
 // __envoy_dynamic_module_v1_http_get_response_header_value_nth is almost the same as
 // __envoy_dynamic_module_v1_http_get_response_header_value, but it allows the module to access n-th
@@ -377,8 +377,8 @@ void __envoy_dynamic_module_v1_http_get_response_header_value_nth(
     __envoy_dynamic_module_v1_type_HttpResponseHeaderMapPtr headers,
     __envoy_dynamic_module_v1_type_InModuleBufferPtr key,
     __envoy_dynamic_module_v1_type_InModuleBufferLength key_length,
-    __envoy_dynamic_module_v1_type_InModuleBufferPtr* result_buffer_ptr,
-    __envoy_dynamic_module_v1_type_InModuleBufferLength* result_buffer_length_ptr, size_t nth);
+    __envoy_dynamic_module_v1_type_DataSlicePtr* result_buffer_ptr,
+    __envoy_dynamic_module_v1_type_DataSliceLength* result_buffer_length_ptr, size_t nth);
 
 // __envoy_dynamic_module_v1_http_set_request_header is called by the module to set the value
 // for a request header key. headers is the one passed to the
