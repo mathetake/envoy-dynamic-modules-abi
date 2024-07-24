@@ -462,9 +462,10 @@ void __envoy_dynamic_module_v1_http_copy_out_request_body_buffer(
 //
 // After calling this function, the previously returned slices may be invalidated.
 void __envoy_dynamic_module_v1_http_append_request_body_buffer(
-    __envoy_dynamic_module_v1_type_HttpRequestBodyBufferPtr buffer,
+
+     __envoy_dynamic_module_v1_type_HttpRequestBodyBufferPtr buffer,
     __envoy_dynamic_module_v1_type_InModuleBufferPtr data,
-    __envoy_dynamic_module_v1_type_InModuleBufferLength data_length);
+     __envoy_dynamic_module_v1_type_InModuleBufferLength data_length);
 
 // __envoy_dynamic_module_v1_http_prepend_request_body_buffer is called by the module to prepend
 // data to the request body buffer. The function prepends data to the beginning of the buffer.
