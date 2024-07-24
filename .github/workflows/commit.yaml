@@ -1,5 +1,5 @@
 
-name: Check
+name: Commit
 
 on:
   pull_request:
@@ -11,13 +11,9 @@ on:
 
 jobs:
   test:
-    name: Try building abi.h
+    name: Check
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
 
-    - name: Build as a C header
-      run: clang abi.h
-
-    - name: Build as a C++ header
-      run: cp abi.h abi.hpp && clang++ abi.hpp
+    - run: ./check.sh
