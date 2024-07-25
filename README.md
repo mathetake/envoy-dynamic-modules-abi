@@ -5,7 +5,6 @@ This repository hosts the ABI for Envoy dynamic modules. The ABI is defined in a
 ## Links
 
 - [mathetake/envoy-dynamic-modules](https://github.com/mathetake/envoy-dynamic-modules): The main repository for the dynamic modules.
-- [mathetake/envoy-dynamic-modules-abi](https://github.com/mathetake/envoy-dynamic-modules-abi): The repository for the ABI definitions of the dynamic modules.
 - [mathetake/envoy-dynamic-modules-go-sdk](https://github.com/mathetake/envoy-dynamic-modules-go-sdk): The Go SDK for the dynamic modules.
 - [mathetake/envoy-dynamic-modules-rust-sdk](https://github.com/mathetake/envoy-dynamic-modules-rust-sdk): The Rust SDK for the dynamic modules.
 - [mathetake/envoy-dynamic-modules-sdk-conformance-tests](https://github.com/mathetake/envoy-dynamic-modules-sdk-conformance-tests): The Rust SDK for the dynamic modules.
