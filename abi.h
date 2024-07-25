@@ -279,7 +279,7 @@ void __envoy_dynamic_module_v1_event_http_filter_destroy(
 __envoy_dynamic_module_v1_type_HttpFilterInstancePtr
 __envoy_dynamic_module_v1_event_http_filter_instance_init(
     __envoy_dynamic_module_v1_type_EnvoyFilterInstancePtr envoy_filter_instance_ptr,
-    __envoy_dynamic_module_v1_type_HttpFilterPtr http_filter_instance_ptr);
+    __envoy_dynamic_module_v1_type_HttpFilterPtr http_filter_ptr);
 
 // __envoy_dynamic_module_v1_event_http_filter_instance_request_headers is called when request
 // headers are received.
