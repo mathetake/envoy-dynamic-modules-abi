@@ -133,23 +133,23 @@ typedef size_t __envoy_dynamic_module_v1_type_DataSliceLength;
 // __envoy_dynamic_module_v1_type_DataSliceLength that is managed by the module.
 typedef size_t __envoy_dynamic_module_v1_type_DataSliceLengthResult;
 
-// __envoy_dynamic_module_v1_type_InModuleBuffer is a struct that contains a buffer and its
-// length. This is the memory layout of each element
-// in__envoy_dynamic_module_v1_type_InModuleBufferVectorPtr.
+// __envoy_dynamic_module_v1_type_InModuleHeader is a struct that contains representation of a
+// header. This is used to pass headers to Envoy from modules.
 typedef struct {
-  __envoy_dynamic_module_v1_type_InModuleBufferPtr data;
-  __envoy_dynamic_module_v1_type_InModuleBufferLength length;
-} __envoy_dynamic_module_v1_type_InModuleBuffer;
+  __envoy_dynamic_module_v1_type_InModuleBufferPtr header_key;
+  __envoy_dynamic_module_v1_type_InModuleBufferLength header_key_length;
+  __envoy_dynamic_module_v1_type_InModuleBufferPtr header_value;
+  __envoy_dynamic_module_v1_type_InModuleBufferLength header_value_length;
+} __envoy_dynamic_module_v1_type_InModuleHeader;
 
 // __envoy_dynamic_module_v1_type_InModuleBufferVectorPtr is a pointer to a vector of
-// __envoy_dynamic_module_v1_type_InModuleBuffer. This is currently only used for sending local
+// __envoy_dynamic_module_v1_type_InModuleHeader. This is currently only used for sending local
 // responses.
-typedef __envoy_dynamic_module_v1_raw_pointer
-    __envoy_dynamic_module_v1_type_InModuleBufferVectorPtr;
+typedef __envoy_dynamic_module_v1_raw_pointer __envoy_dynamic_module_v1_type_InModuleHeadersPtr;
 OWNED_BY_MODULE;
 
-// __envoy_dynamic_module_v1_type_InModuleBufferVectorSize is the size of the vector of buffers.
-typedef size_t __envoy_dynamic_module_v1_type_InModuleBufferVectorSize;
+// __envoy_dynamic_module_v1_type_InModuleHeadersSize is the size of the vector of buffers.
+typedef size_t __envoy_dynamic_module_v1_type_InModuleHeadersSize;
 
 // -----------------------------------------------------------------------------
 // ----------------------------------- Enums -----------------------------------
@@ -571,9 +571,9 @@ void __envoy_dynamic_module_v1_http_continue_response(
 // body is the body to send. body_length is the length of the body.
 void ___envoy_dynamic_module_v1_http_send_response(
     __envoy_dynamic_module_v1_type_EnvoyFilterInstancePtr envoy_filter_instance_ptr,
-    __envoy_dynamic_module_v1_type_InModuleBufferVectorPtr headers_vector,
-    __envoy_dynamic_module_v1_type_InModuleBufferVectorSize headers_vector_size,
-    uint32_t status_code, __envoy_dynamic_module_v1_type_InModuleBufferPtr body,
+    __envoy_dynamic_module_v1_type_InModuleHeadersPtr headers_vector,
+    __envoy_dynamic_module_v1_type_InModuleHeadersSize headers_vector_size, uint32_t status_code,
+    __envoy_dynamic_module_v1_type_InModuleBufferPtr body,
     __envoy_dynamic_module_v1_type_InModuleBufferLength body_length);
 
 #ifdef __cplusplus
