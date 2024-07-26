@@ -571,8 +571,8 @@ void __envoy_dynamic_module_v1_http_continue_response(
 // body is the body to send. body_length is the length of the body.
 void ___envoy_dynamic_module_v1_http_send_response(
     __envoy_dynamic_module_v1_type_EnvoyFilterInstancePtr envoy_filter_instance_ptr,
-    __envoy_dynamic_module_v1_type_InModuleHeadersPtr headers_vector,
-    __envoy_dynamic_module_v1_type_InModuleHeadersSize headers_vector_size, uint32_t status_code,
+    uint32_t status_code, __envoy_dynamic_module_v1_type_InModuleHeadersPtr headers_vector,
+    __envoy_dynamic_module_v1_type_InModuleHeadersSize headers_vector_size,
     __envoy_dynamic_module_v1_type_InModuleBufferPtr body,
     __envoy_dynamic_module_v1_type_InModuleBufferLength body_length);
 
