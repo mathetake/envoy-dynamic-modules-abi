@@ -135,6 +135,9 @@ typedef size_t __envoy_dynamic_module_v1_type_DataSliceLengthResult;
 
 // __envoy_dynamic_module_v1_type_InModuleHeader is a struct that contains representation of a
 // header. This is used to pass headers to Envoy from modules.
+//
+// This matches the memory representation of [2]string in Go. TODO: I believe this also
+// matches something in Rust, so document it here once we know.
 typedef struct {
   __envoy_dynamic_module_v1_type_InModuleBufferPtr header_key;
   __envoy_dynamic_module_v1_type_InModuleBufferLength header_key_length;
@@ -145,6 +148,10 @@ typedef struct {
 // __envoy_dynamic_module_v1_type_InModuleBufferVectorPtr is a pointer to a vector of
 // __envoy_dynamic_module_v1_type_InModuleHeader. This is currently only used for sending local
 // responses.
+//
+// This combined with __envoy_dynamic_module_v1_type_InModuleHeadersSize can be used to
+// pass the data [][2]string in Go. TODO: I believe this also matches something in Rust, so document
+// it here once we know.
 typedef __envoy_dynamic_module_v1_raw_pointer __envoy_dynamic_module_v1_type_InModuleHeadersPtr;
 OWNED_BY_MODULE;
 
