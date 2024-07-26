@@ -133,6 +133,24 @@ typedef size_t __envoy_dynamic_module_v1_type_DataSliceLength;
 // __envoy_dynamic_module_v1_type_DataSliceLength that is managed by the module.
 typedef size_t __envoy_dynamic_module_v1_type_DataSliceLengthResult;
 
+// __envoy_dynamic_module_v1_type_InModuleBuffer is a struct that contains a buffer and its
+// length. This is the memory layout of each element
+// in__envoy_dynamic_module_v1_type_InModuleBufferVectorPtr.
+typedef struct {
+  __envoy_dynamic_module_v1_type_InModuleBufferPtr data;
+  __envoy_dynamic_module_v1_type_InModuleBufferLength length;
+} __envoy_dynamic_module_v1_type_InModuleBuffer;
+
+// __envoy_dynamic_module_v1_type_InModuleBufferVectorPtr is a pointer to a vector of
+// __envoy_dynamic_module_v1_type_InModuleBuffer. This is currently only used for sending local
+// responses.
+typedef __envoy_dynamic_module_v1_raw_pointer
+    __envoy_dynamic_module_v1_type_InModuleBufferVectorPtr;
+OWNED_BY_MODULE;
+
+// __envoy_dynamic_module_v1_type_InModuleBufferVectorSize is the size of the vector of buffers.
+typedef size_t __envoy_dynamic_module_v1_type_InModuleBufferVectorSize;
+
 // -----------------------------------------------------------------------------
 // ----------------------------------- Enums -----------------------------------
 // -----------------------------------------------------------------------------
@@ -545,6 +563,18 @@ void __envoy_dynamic_module_v1_http_continue_request(
 // the response. This function is used when the module returned non Continue status in the events.
 void __envoy_dynamic_module_v1_http_continue_response(
     __envoy_dynamic_module_v1_type_EnvoyFilterInstancePtr envoy_filter_instance_ptr);
+
+// ---------------- Miscellaneous API ----------------
+
+// __envoy_dynamic_module_v1_http_send_response is called by the module to send a response to the
+// client. headers_vector is a vector of headers to send. status_code is the status code to send.
+// body is the body to send. body_length is the length of the body.
+void ___envoy_dynamic_module_v1_http_send_response(
+    __envoy_dynamic_module_v1_type_EnvoyFilterInstancePtr envoy_filter_instance_ptr,
+    __envoy_dynamic_module_v1_type_InModuleBufferVectorPtr headers_vector,
+    __envoy_dynamic_module_v1_type_InModuleBufferVectorSize headers_vector_size,
+    uint32_t status_code, __envoy_dynamic_module_v1_type_InModuleBufferPtr body,
+    __envoy_dynamic_module_v1_type_InModuleBufferLength body_length);
 
 #ifdef __cplusplus
 }
