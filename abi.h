@@ -569,7 +569,7 @@ void __envoy_dynamic_module_v1_http_continue_response(
 // __envoy_dynamic_module_v1_http_send_response is called by the module to send a response to the
 // client. headers_vector is a vector of headers to send. status_code is the status code to send.
 // body is the body to send. body_length is the length of the body.
-void ___envoy_dynamic_module_v1_http_send_response(
+void __envoy_dynamic_module_v1_http_send_response(
     __envoy_dynamic_module_v1_type_EnvoyFilterInstancePtr envoy_filter_instance_ptr,
     uint32_t status_code, __envoy_dynamic_module_v1_type_InModuleHeadersPtr headers_vector,
     __envoy_dynamic_module_v1_type_InModuleHeadersSize headers_vector_size,
